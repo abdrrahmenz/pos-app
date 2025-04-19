@@ -3,9 +3,13 @@ import 'dart:convert';
 import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/data/models/response/qris_response_model.dart';
 import 'package:flutter_pos_app/data/models/response/qris_status_response_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 class MidtransRemoteDatasource {
+  HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+    HttpLogger(logLevel: LogLevel.BODY),
+  ]);
+
   String generateBasicAuthHeader(String serverKey) {
     final base64Credentials = base64Encode(utf8.encode('$serverKey:'));
     final authHeader = 'Basic $base64Credentials';

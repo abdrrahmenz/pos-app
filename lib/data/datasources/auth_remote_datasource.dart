@@ -2,9 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_pos_app/core/constants/variables.dart';
 import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/data/models/response/auth_response_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 class AuthRemoteDatasource {
+  HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+    HttpLogger(logLevel: LogLevel.BODY),
+  ]);
   Future<Either<String, AuthResponseModel>> login(
     String email,
     String password,

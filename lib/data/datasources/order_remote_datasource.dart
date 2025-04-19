@@ -1,10 +1,14 @@
 import 'package:flutter_pos_app/core/constants/variables.dart';
 import 'package:flutter_pos_app/data/models/request/order_request_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 import 'auth_local_datasource.dart';
 
 class OrderRemoteDatasource {
+  HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+    HttpLogger(logLevel: LogLevel.BODY),
+  ]);
+
   Future<bool> sendOrder(OrderRequestModel requestModel) async {
     final url = Uri.parse('${Variables.baseUrl}/api/orders');
     final authData = await AuthLocalDatasource().getAuthData();

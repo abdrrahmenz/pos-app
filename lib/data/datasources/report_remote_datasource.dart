@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart' as http;
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 import '../../core/constants/variables.dart';
 import '../models/response/product_sales_report.dart';
@@ -7,6 +7,10 @@ import '../models/response/summary_response_model.dart';
 import 'auth_local_datasource.dart';
 
 class ReportRemoteDatasource {
+  HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+    HttpLogger(logLevel: LogLevel.BODY),
+  ]);
+
   Future<Either<String, SummaryResponseModel>> getSummary(
       String startDate, String endDate) async {
     final authData = await AuthLocalDatasource().getAuthData();

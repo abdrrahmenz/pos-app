@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pos_app/core/extensions/build_context_ext.dart';
 import 'package:flutter_pos_app/core/extensions/string_ext.dart';
-import 'package:flutter_pos_app/presentation/history/pages/history_page.dart';
-import 'package:flutter_pos_app/presentation/home/pages/dashboard_page.dart';
 import 'package:flutter_pos_app/presentation/setting/models/category_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -176,6 +171,26 @@ class _AddProductPageState extends State<AddProductPage> {
                     }, success: (_) {
                       return Button.filled(
                         onPressed: () {
+                          if (category == null) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'Kategori tidak boleh kosong'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                });
+                            return;
+                          }
                           final String name = nameController!.text;
                           final int price =
                               priceController!.text.toIntegerFromText;

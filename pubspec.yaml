@@ -52,6 +52,7 @@ dependencies:
   sqflite: ^2.3.0
   widgets_to_image: ^1.0.0
   mobile_scanner: ^5.2.1
+  pretty_http_logger: ^1.0.5
 
 dev_dependencies:
   build_runner: ^2.4.7

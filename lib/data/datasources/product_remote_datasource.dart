@@ -2,13 +2,18 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_pos_app/core/constants/variables.dart';
 import 'package:flutter_pos_app/data/models/request/product_request_model.dart';
 import 'package:flutter_pos_app/data/models/response/add_product_response_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_pos_app/data/models/response/product_response_model.dart';
+import 'package:http/http.dart' as http2;
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 import '../models/response/category_response_model.dart';
 import 'auth_local_datasource.dart';
 
 class ProductRemoteDatasource {
+  HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [
+    HttpLogger(logLevel: LogLevel.BODY),
+  ]);
+
   Future<Either<String, ProductResponseModel>> getProducts() async {
     final authData = await AuthLocalDatasource().getAuthData();
     final response = await http.get(
@@ -31,14 +36,14 @@ class ProductRemoteDatasource {
     final Map<String, String> headers = {
       'Authorization': 'Bearer ${authData.token}',
     };
-    var request = http.MultipartRequest(
+    var request = http2.MultipartRequest(
         'POST', Uri.parse('${Variables.baseUrl}/api/products'));
     request.fields.addAll(productRequestModel.toMap());
-    request.files.add(await http.MultipartFile.fromPath(
+    request.files.add(await http2.MultipartFile.fromPath(
         'image', productRequestModel.image.path));
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+    http2.StreamedResponse response = await request.send();
 
     final String body = await response.stream.bytesToString();
 
